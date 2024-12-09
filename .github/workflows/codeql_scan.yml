@@ -1,0 +1,39 @@
+name: CodeQL
+
+on:
+  workflow_dispatch:
+  #push:
+  #  branches: [ "develop" ]
+
+  pull_request:
+    branches: ["main"]
+     
+  release:
+     types: [published] # Trigger on tag-based pull request to main branch
+
+
+permissions:
+   id-token: write
+   contents: read
+   actions: read
+
+jobs:
+
+  codeql_scal:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+# Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
